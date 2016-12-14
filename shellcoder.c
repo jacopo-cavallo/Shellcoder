@@ -66,13 +66,14 @@ int main(int argc, char **argv)
 					  "\\x48\\x83\\xc0\\x3b\\x0f\\x05\\xe8\\xec\\xff\\xff\\xff");
  	for(i=0;i<len;i++)
   	{
+		//it copies hex values of argv[1] chars into the program buffer
   		snprintf(&program[i*4], sizeof(program)-(i*4),"\\x%02x", (unsigned char*)argv[1][i]);
   	}		
 
   	len *= 4;
   
   	program[len] = '\0';	
-
+	//We simply append argv[1] to our skeleton shellcode (in other words we call exec with argv[1] as argument)
 	strncat(shellcode, program, len);
 	
 	shellcode[LEN_SKELETON + len]='\0';
