@@ -21,7 +21,7 @@ _start:
 		xor rdx, rdx
 
 ;setreuid(uid_t ruid, uid_t euid)    opcode 0x71;
-;rdi and rsi are set to 0 yet
+;rdi and rsi are already set to 0 
 ;it tries to become root
 
 		mov al, 0x71
