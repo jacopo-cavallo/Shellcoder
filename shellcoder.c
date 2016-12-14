@@ -67,6 +67,14 @@ void privEsc(char *shellcode, int uid[])
 	else
 	{
 		//Coming soon..
+		/*max value =  (2^16)-1
+		mov di, 65535	; opcode 66 bf ff ff
+		mov si, 65535	; opcode 66 bf ff ff
+		
+		..I must manage null-bytes for some values..
+		mov di, 202;	; opcode 66 bf ca 00
+		mov si, 216;	; opcdoe 66 be d8 00
+		*/
 	}
 }
 
