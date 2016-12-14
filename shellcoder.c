@@ -58,8 +58,6 @@ int main(int argc, char **argv)
 {
 	int i;
 	size_t len;
-	unsigned char shellcode[LEN_SKELETON + len*4 + 1];
-	unsigned char program[len*4+1];
 	
 	if(argc < 2)
 	{
@@ -68,6 +66,8 @@ int main(int argc, char **argv)
 	}
 	
 	len = strlen(argv[1]);
+	unsigned char shellcode[LEN_SKELETON + len*4 + 1];
+	unsigned char program[len*4+1];
 	
 	snprintf(shellcode, LEN_SKELETON, "\\x48\\x31\\xc0\\x48\\x31\\xff\\x48\\x31\\xf6\\x48"
 					  "\\x31\\xd2\\xb0\\x71\\x0f\\x05\\x48\\x31\\xc0\\xeb"
