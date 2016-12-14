@@ -73,7 +73,7 @@ int main(int argc, char **argv)
   	len *= 4;
   
   	program[len] = '\0';	
-	//We simply append argv[1] to our skeleton shellcode (in other words we call exec with argv[1] as argument)
+	//We simply append argv[1] to our skeleton shellcode (in other words we call the execve with argv[1] as argument)
 	strncat(shellcode, program, len);
 	
 	shellcode[LEN_SKELETON + len]='\0';
