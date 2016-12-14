@@ -3,7 +3,8 @@
  * I must add a lot of functionalities...coming soon    
  
  The skeleton of shellcode used in the c program is taken by this simple asm program that 
- tries to elevate its privileges to root before to exec a shell
+ tries to elevate its privileges to root (in the next days I'm going to implement a generic privilege escalation with 
+ a uid choosen by the user) before to exec a shell
  *********************************************************
  Written by antz
  
