@@ -79,7 +79,7 @@ void makeExec(char *shellcode, char *program, size_t size)
 }
 
 
-void usage(){}//Coming soon
+void usage(){exit(EXIT_FAILURE);}//Coming soon
 
 void banner(){}//Coming soon
 
