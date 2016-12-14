@@ -87,7 +87,7 @@ int main(int argc, char **argv)
 	
 	shellcode[LEN_SKELETON + len]='\0';
 	
-	printf("%s\n", shellcode);
+	printf("%s\nLength: %d\n", shellcode, (LEN_SKELETON + len)/4);
 	
 	return 0;
 
