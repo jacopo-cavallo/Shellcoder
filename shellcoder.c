@@ -94,7 +94,7 @@ void makeExec(char *shellcode, char *program, size_t size)
 }
 
 
-void usage(){exit(EXIT_FAILURE);}//Coming soon
+void usage(){printf("Usage-example: ./shellcoder -p /bin/sh -u root\n"); exit(EXIT_FAILURE);}//Coming soon
 
 void banner(){}//Coming soon
 
