@@ -1,7 +1,13 @@
 /********************************************************
  * Created by antz					
  * I must add a lot of functionalities...coming soon    
- 
+ (TODO: 
+ 	Aggiungere scelta per produrre shellcodes anche per x86. 
+ 	Aggiungere scelta per eseguire altre syscalls oltre alla execve.
+ 	Sistemare Usage(), Banner() ed il problema dei null-bytes di setreuid().
+	Aggiungere possibilità di passare programmi con argomenti alla execve.
+	Aggiungere possibilità di concatenare uno shellcode (fornito dall'utente) a quello prodotto dal tool
+)
  The skeleton of shellcode used in the c program is taken by this simple asm program that 
  tries to elevate its privileges to root (in the next days I'm going to implement a generic privilege escalation with 
  a uid choosen by the user) before to exec a shell
