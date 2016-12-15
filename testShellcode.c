@@ -18,3 +18,20 @@ func = (int (*)()) shellcode;
 return 0;
 
 }
+
+
+/* Or test shellcodes with this code provided by io.smashtestack.org authors
+
+#include <sys/mman.h>
+#include <string.h>
+#include <stdio.h>
+
+char sc[]= "Insert shellcode here";
+
+int main(){
+        void * a = mmap(0, 4096, PROT_EXEC |PROT_READ | PROT_WRITE, MAP_ANONYMO$
+        printf("allocated executable memory at: %p\n", a);
+        ((void (*)(void)) memcpy(a, sc, sizeof(sc)))();
+}
+
+/*
