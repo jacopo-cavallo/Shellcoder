@@ -7,6 +7,7 @@
  	Sistemare Usage(), Banner() ed il problema dei null-bytes di setreuid().
 	Aggiungere possibilità di passare programmi con argomenti alla execve.
 	Aggiungere possibilità di concatenare uno shellcode (fornito dall'utente) a quello prodotto dal tool
+	Mettere le definizioni delle funzioni in un file a parte.
 )
  The skeleton of shellcode used in the c program is taken by this simple asm program that 
  tries to elevate its privileges to root (in the next days I'm going to implement a generic privilege escalation with 
