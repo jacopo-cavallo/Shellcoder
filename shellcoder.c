@@ -1,5 +1,5 @@
 /********************************************************
- * Created by antz					
+ * Created by metantz					
  * I must add a lot of functionalities...coming soon    
  (TODO: 
  	Aggiungere scelta per produrre shellcodes anche per x86. 
